@@ -10,6 +10,7 @@
 
 namespace FileSearch {
 namespace Gui{
+typedef std::function<void()> TaskDispatcherTask;
 
 // CFileSearchDlg dialog
 class CFileSearchDlg : public CDialogEx {
@@ -19,7 +20,7 @@ public:
 
     // Dialog Data
     enum { IDD = IDD_FILESEARCH_DIALOG };
-    enum { IDM_POPUPMENU_ITEM_FIRST = 5001, IDM_POPUPMENU_ITEM_LAST = 5100 };
+    enum { IDM_POPUPMENU_ITEM_FIRST = 5001, IDM_POPUPMENU_ITEM_LAST = 5100, WM_TASKDISPATCHERMSG = WM_USER + 225 };
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
@@ -52,6 +53,10 @@ public:
     afx_msg void OnBnClickedChooseButton();
     afx_msg void OnBnClickedStopButton();
     afx_msg void OnBnClickedExampleQueriesButton();
+    afx_msg LRESULT OnTaskDispatcherMsg(WPARAM wParam, LPARAM lParam);
+
+    
+    void runInGuiThread(TaskDispatcherTask&& task);
 };
 
 }

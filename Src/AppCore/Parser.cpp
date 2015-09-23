@@ -14,7 +14,8 @@ enum ErrorType {
     etOpeningBracketExpected,
     etClosingBracketExpected,
     etUnexpected,
-    etMaxRecursionExceed
+    etMaxRecursionExceed,
+    etMaxTokenLenExceed
 };
 
 
@@ -74,7 +75,7 @@ public:
     }
 
     void raiseError(ErrorType errNum) {
-        static const char* const errs[8] = {
+        static const char* const errs[9] = {
             nullptr,
             nullptr,
             "Unexpected end of expression",
@@ -82,7 +83,8 @@ public:
             "'(' expected",
             "')' expected",
             nullptr,
-            "Max recursion exceed"
+            "Max recursion exceed",
+            "Max token lenght exceeded"
         };
         std::string msg;
 
@@ -112,7 +114,7 @@ public:
     }
 
     bool getNextToken(bool allowRaiseError = true) {
-        *curToken = '\0';
+        memset(curToken, 0, sizeof(curToken));
 
         while (expr[pos] == ' ') {
             pos++;
@@ -179,6 +181,9 @@ public:
                     raiseError(etUnexpectedEndOfExpression);
                 }
                 while (expr[pos] != '"') {
+                    if (i >= MAX_TOKEN_LEN) {
+                        raiseError(etMaxTokenLenExceed);
+                    }
                     if (expr[pos] == '\0') {
                         raiseError(etUnexpectedEndOfExpression);
                     }
@@ -197,9 +202,15 @@ public:
         else if (isDigit()) {
             int i = 0;
             while (isDigit()) {
+                if (i >= MAX_TOKEN_LEN) {
+                    raiseError(etMaxTokenLenExceed);
+                }
                 curToken[i++] = expr[pos++];
             }
             if (expr[pos] != '\0' && expr[pos] != ' ' && !IsDelim(expr[pos])) {
+                if (i >= MAX_TOKEN_LEN) {
+                    raiseError(etMaxTokenLenExceed);
+                }
                 curToken[i++] = expr[pos];
                 curToken[i] = '\0';
                 raiseError(etUnexpected);
@@ -217,6 +228,9 @@ public:
         } else if (isLetter()) {
             int i = 0;
             while (isAlNum()) {
+                if (i >= MAX_TOKEN_LEN) {
+                    raiseError(etMaxTokenLenExceed);
+                }
                 curToken[i++] = expr[pos++];
             }
             curToken[i] = '\0';
@@ -531,13 +545,13 @@ public:
     }
 
 private:
-    enum { MAX_TOKEN_LEN = 80, MAX_EXPR_LEN = 255 };
+    enum { MAX_TOKEN_LEN = 80 };
     std::shared_ptr<RuntimeInfo> runtimeInfo_;
     int pos;
     ExprValue result;
     char* expr;
     std::vector<ExprNode *> history;
-    char curToken[MAX_TOKEN_LEN];
+    char curToken[MAX_TOKEN_LEN+3];
 };
 
 ExprNode::ExprNode(OperationType type, ExprValue _value, ExprNodePtr&& _left, ExprNodePtr&& _right) : value(_value){

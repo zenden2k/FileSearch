@@ -29,6 +29,14 @@ const TCHAR * const SampleQueries[] = {
     _T("strlen(name)<15")
 };
 
+namespace {
+struct TaskDispatcherMessageStruct {
+    TaskDispatcherTask callback;
+    //bool async;
+    //Object* sender;
+};
+}
+
 // CAboutDlg dialog used for App About
 
 class CAboutDlg : public CDialogEx {
@@ -88,6 +96,7 @@ BEGIN_MESSAGE_MAP(CFileSearchDlg, CDialogEx)
     ON_WM_SYSCOMMAND()
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
+    ON_MESSAGE(WM_TASKDISPATCHERMSG, &CFileSearchDlg::OnTaskDispatcherMsg)
     ON_BN_CLICKED(IDC_SEARCHBUTTON, &CFileSearchDlg::OnBnClickedSearchButton)
     ON_BN_CLICKED(IDC_CHOOSEBUTTON, &CFileSearchDlg::OnBnClickedChooseButton)
     ON_BN_CLICKED(IDC_STOPBUTTON, &CFileSearchDlg::OnBnClickedStopButton)
@@ -235,10 +244,15 @@ void CFileSearchDlg::OnBnClickedSearchButton()
         int res = 0;
         try {
             res = se.searchFiles(startDirU8, expr, m_StopFlag, [&](const FoundFile& f) {
-                m_ResultsListBox.AddString(U2W(f.path()));
+                runInGuiThread([this, &f]() {
+                    m_ResultsListBox.AddString(U2W(f.path()));
+                });
+                
             });
         } catch (std::exception& ex) {
-            MessageBox(U2W(ex.what()), _T("Îøèáêà"), MB_ICONERROR);
+            runInGuiThread([this, &ex]() {
+                MessageBox(U2W(ex.what()), _T("Îøèáêà"), MB_ICONERROR);
+            });
         }
         backgroundTaskFinished();
         return res;
@@ -279,5 +293,19 @@ void CFileSearchDlg::OnBnClickedExampleQueriesButton() {
     excludeArea.rcExclude = rc;
     popupMenu.TrackPopupMenuEx(TPM_LEFTALIGN | TPM_LEFTBUTTON, menuOrigin.x, menuOrigin.y, this, &excludeArea);
 }
+
+LRESULT CFileSearchDlg::OnTaskDispatcherMsg(WPARAM wParam, LPARAM ) {
+    TaskDispatcherMessageStruct* msg = reinterpret_cast<TaskDispatcherMessageStruct*>(wParam);
+    msg->callback();
+    return 0;
 }
+
+void CFileSearchDlg::runInGuiThread(TaskDispatcherTask&& task) {
+    TaskDispatcherMessageStruct msg;
+    msg.callback = std::move(task);
+    SendMessage(WM_TASKDISPATCHERMSG, reinterpret_cast<WPARAM>(&msg), 0);
+
+}
+}
+
 }
