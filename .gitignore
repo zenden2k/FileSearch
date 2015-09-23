@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+*.aps
+*.sdf
+*.suo
+
+Debug/
+Release/
+ipch/
+Include/

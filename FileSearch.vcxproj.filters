@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Src\AppCore">
+      <UniqueIdentifier>{886bd73c-37e7-48da-8627-0277cd419bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Gui">
+      <UniqueIdentifier>{76fb42f6-a36a-4c6b-86dc-d53626f871fd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\AppCore\Parser.h">
+      <Filter>Src\AppCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AppCore\Expression.h">
+      <Filter>Src\AppCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AppCore\ParserTypes.h">
+      <Filter>Src\AppCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AppCore\RuntimeInfo.h">
+      <Filter>Src\AppCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AppCore\SearchEngine.h">
+      <Filter>Src\AppCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AppCore\Utils.h">
+      <Filter>Src\AppCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\resource.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\stdafx.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AppCore\Parser.cpp">
+      <Filter>Src\AppCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AppCore\Expression.cpp">
+      <Filter>Src\AppCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AppCore\RuntimeInfo.cpp">
+      <Filter>Src\AppCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AppCore\SearchEngine.cpp">
+      <Filter>Src\AppCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AppCore\Utils.cpp">
+      <Filter>Src\AppCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Gui\BrowseFolder.cpp">
+      <Filter>Src\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Gui\FileSearch.cpp">
+      <Filter>Src\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Gui\FileSearchDlg.cpp">
+      <Filter>Src\Gui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Src\FileSearch.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\FileSearch.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\FileSearch.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Src\res\FileSearch.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
